@@ -1,33 +1,5 @@
 version: "3.9"
 services:
-  # torchserve_gpu:
-  #   build:
-  #     context: ./ts_examples/gpu_model
-  #     dockerfile: Dockerfile
-  #   image: moono/ts_examples:gpu
-  #   shm_size: 1gb
-  #   environment:
-  #     - LOGGER_NAME=GPU_MODEL
-  #     - LOG_LEVEL=DEBUG
-  #   ports:
-  #     - 18080:8080
-  #     - 18081:8081
-  #   volumes:
-  #     - ./ts_examples/gpu_model/ts_assets/config.properties:/home/model-server/config.properties
-  #     - ./ts_examples/gpu_model/ts_assets/ts_log_config.xml:/home/model-server/ts_log_config.xml
-  #     - ./ts_examples/gpu_model/exported:/home/model-server/model-store
-  #   command: [
-  #     "torchserve", 
-  #     "--ts-config", "/home/model-server/config.properties",
-  #     "--log-config", "/home/model-server/ts_log_config.xml"
-  #   ]
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #         - driver: nvidia
-  #           device_ids: ['0']
-  #           capabilities: [gpu]
   torchserve_empty:
     build:
       context: ./ts_examples/empty_model
@@ -44,9 +16,4 @@ services:
       - ./ts_examples/empty_model/config.properties:/home/model-server/config.properties
       - ./ts_examples/empty_model/ts_log_config.xml:/home/model-server/ts_log_config.xml
       - ./ts_examples/empty_model/exported:/home/model-server/model-store
-    # command: [
-    #   "torchserve", 
-    #   "--ts-config", "/home/model-server/config.properties",
-    #   "--log-config", "/home/model-server/ts_log_config.xml"
-    # ]
 
