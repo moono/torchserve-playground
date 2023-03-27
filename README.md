@@ -9,10 +9,10 @@
   * describe model: `http://localhost:8081/models/empty_model`
 * If the request exceeds current `job_queue_size` then following error will be returned,
 
-```json
+```yaml
 {
-  'code': 503, 
-  'type': 'ServiceUnavailableException', 
-  'message': 'Model "empty_model" has no worker to serve inference request. Please use scale workers API to add workers.'
+    'code': 503, 
+    'type': 'ServiceUnavailableException', 
+    'message': 'Model "empty_model" has no worker to serve inference request. Please use scale workers API to add workers.'
 }
 ```
