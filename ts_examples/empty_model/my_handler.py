@@ -49,6 +49,16 @@ class MyTSModel(object):
             map_location = "cuda"
             device = torch.device(map_location + ":" + str(properties.get("gpu_id")))
         return (map_location, device)
+    
+    # parse boolean env variable: default False
+    @staticmethod
+    def _parse_env_boolean(key: str) -> bool:
+        v = False
+        if key in os.environ:
+            env_val = os.environ.get(key).lower()
+            assert env_val in ("true", "false")
+            v = True if env_val == "true" else False
+        return v
 
     def initialize(self, context: Context) -> None:
         properties = context.system_properties
@@ -56,7 +66,15 @@ class MyTSModel(object):
         self.manifest = context.manifest
         model_dir = properties.get("model_dir")
         logger.info(f"Using backend {self.device}!")
-
+        
+        simulate_error = self._parse_env_boolean("SIMULATE_ERROR")
+        if simulate_error:
+            sleep_s = 10
+            logger.info(f"sleeping {sleep_s}s ... ")
+            time.sleep(sleep_s)
+            logger.info(f"sleeping {sleep_s}s ... DONE")
+            logger.info(f"Invoking error on initialization on purpose !!!")
+            raise ValueError("Initialization Error!!")
         self.initialized = True
         logger.info(f"Model initialization ... DONE !!")
         return
