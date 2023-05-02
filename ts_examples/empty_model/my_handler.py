@@ -7,6 +7,7 @@ from typing import List, Dict, Any, Tuple
 from ts.context import Context
 
 from log_config import get_logger
+from my_models import ModelStatus
 
 logger = get_logger(
     name=__name__,
@@ -26,6 +27,7 @@ class MyTSModel(object):
 
         # model specific
         self.model = None
+        self.model_status = ModelStatus.not_ready
         return
 
     @staticmethod
@@ -49,7 +51,7 @@ class MyTSModel(object):
             map_location = "cuda"
             device = torch.device(map_location + ":" + str(properties.get("gpu_id")))
         return (map_location, device)
-    
+
     # parse boolean env variable: default False
     @staticmethod
     def _parse_env_boolean(key: str) -> bool:
@@ -66,7 +68,7 @@ class MyTSModel(object):
         self.manifest = context.manifest
         model_dir = properties.get("model_dir")
         logger.info(f"Using backend {self.device}!")
-        
+
         simulate_error = self._parse_env_boolean("SIMULATE_ERROR")
         if simulate_error:
             sleep_s = 10
@@ -76,6 +78,7 @@ class MyTSModel(object):
             logger.info(f"Invoking error on initialization on purpose !!!")
             raise ValueError("Initialization Error!!")
         self.initialized = True
+        self.model_status = ModelStatus.ready
         logger.info(f"Model initialization ... DONE !!")
         return
 
@@ -87,6 +90,16 @@ class MyTSModel(object):
         logger.debug({"msg": f"sleeping {sleep_s}s ... DONE "}, extra=log_extra)
         return
 
+    def _is_describe(self):
+        if self.context and self.context.get_request_header(0, "describe"):
+            if self.context.get_request_header(0, "describe") == "True":
+                return True
+        return False
+
+    def describe_handle(self):
+        logger.info("Collect customized metadata")
+        return {"status": self.model_status}
+
     # must have: Torchserve
     def handle(self, data: List[Dict[str, Any]], context: Context):
         # It can be used for pre or post processing if needed as additional request
@@ -94,6 +107,10 @@ class MyTSModel(object):
 
         self.context = context
         # metrics = self.context.metrics
+
+        if self._is_describe():
+            output = [self.describe_handle()]
+            return output
 
         output = list()
         for idx, row in enumerate(data):

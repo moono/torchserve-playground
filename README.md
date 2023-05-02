@@ -74,3 +74,39 @@
     }
 ]
 ```
+
+## Q3. Customized model status via `GET /models/{model_name}?customized=true`
+* ref: https://pytorch.org/serve/management_api.html#describe-model
+* if backend server is dead(not ready) on `initialize()` then `GET /models/{model_name}?customized=true` will not work
+* check model's initialized status via `GET /models/{model_name}`
+  * `res[0]["workers"][0]["status"] === "READY"`
+* and if ready we can use `GET /models/{model_name}?customized=true` to check custom model status
+
+```yaml
+// example customized response
+[
+    {
+        "modelName": "empty_model",
+        "modelVersion": "1.0",
+        "modelUrl": "empty_model.mar",
+        "runtime": "python",
+        "minWorkers": 1,
+        "maxWorkers": 1,
+        "batchSize": 1,
+        "maxBatchDelay": 100,
+        "loadedAtStartup": true,
+        "workers": [
+            {
+                "id": "9000",
+                "startTime": "2023-05-02T02:12:28.169Z",
+                "status": "READY",
+                "memoryUsage": 0,
+                "pid": 30,
+                "gpu": false,
+                "gpuUsage": "N/A"
+            }
+        ],
+        "customizedMetadata": "{\n  \"status\": \"ready\"\n}"
+    }
+]
+```

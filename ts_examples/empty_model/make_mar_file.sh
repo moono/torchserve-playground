@@ -11,6 +11,6 @@ cd ./ts_examples/empty_model
 torch-model-archiver --model-name empty_model \
 --version 1.0 \
 --handler my_handler.py \
---extra-files log_config.py \
+--extra-files log_config.py,my_models.py \
 --export-path exported \
 --force
