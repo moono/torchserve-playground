@@ -12,5 +12,6 @@ torch-model-archiver --model-name empty_model \
 --version 1.0 \
 --handler my_handler.py \
 --extra-files log_config.py,my_models.py \
+--config-file model-config.yaml \
 --export-path exported \
 --force
