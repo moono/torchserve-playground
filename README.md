@@ -17,7 +17,15 @@
 }
 ```
 
-## Q2. How to check model status (Not using `/ping` endpoint)
+## Q2. How to check model status(using `/ping` endpoint, new feature in torchserve `0.8.0`)
+* Inference API(8080)'s `/ping` endpoint is used for frontend (java server)
+* Starting from torchserve `0.8.0`, on model initialization, one can check if backend model initialization  is failed or not.
+  * ref: https://github.com/pytorch/serve/releases/tag/v0.8.0
+* Since torchserve automatically restarts backend worker if initialization failed, one can set new `model-config.yml` file to specify `maxRetryTimeoutInSec` value to timeout the retry attempt.
+* This helps because when torchserve started, the `/ping` endpoint always returns `200 healthy` even model initialization fails.
+* But with new feature after `maxRetryTimeoutInSec`, server will return `500 Unhealthy` if initialization fails.
+
+## Q3. How to check model status (Not using `/ping` endpoint)
 * Inference API(8080)'s `/ping` endpoint is used for frontend (java server)
 * use Management API(8081)'s model describe endpoint `/models/<model-name>`
 * will return something like
@@ -75,7 +83,7 @@
 ]
 ```
 
-## Q3. Customized model status via `GET /models/{model_name}?customized=true`
+## Q4. Customized model status via `GET /models/{model_name}?customized=true`
 * ref: https://pytorch.org/serve/management_api.html#describe-model
 * if backend server is dead(not ready) on `initialize()` then `GET /models/{model_name}?customized=true` will not work
 * check model's initialized status via `GET /models/{model_name}`
