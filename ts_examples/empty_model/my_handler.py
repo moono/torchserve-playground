@@ -85,13 +85,21 @@ class MyTSModel(object):
     def run(self, row: Dict[str, Any], log_extra: Dict[str, str]):
         sleep_s = int(row.get("sleep_s", 1))
         simulate_crash = row.get("simulate_crash", None)
+        simulate_long_req = row.get("simulate_long_req", None)
 
-        if simulate_crash is not None:
-            # zero division
-            ret = 0 / 0
         logger.debug({"msg": f"sleeping {sleep_s}s ... "}, extra=log_extra)
         time.sleep(sleep_s)
         logger.debug({"msg": f"sleeping {sleep_s}s ... DONE "}, extra=log_extra)
+
+        if simulate_crash is not None:
+            logger.debug({"msg": f"simulating crash by zero division"}, extra=log_extra)
+            # zero division
+            ret = 0 / 0
+
+        if simulate_long_req is not None:
+            logger.debug({"msg": f"simulating long response time "}, extra=log_extra)
+            # default response timeout: 120
+            time.sleep(int(simulate_long_req))
         return
 
     def _is_describe(self):

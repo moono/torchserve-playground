@@ -4,6 +4,6 @@ minWorkers: 1 # default: #CPU or #GPU
 maxWorkers: 1 # default: #CPU or #GPU
 batchSize: 1 # default: 1
 maxBatchDelay: 100 # default: 100 msec
-responseTimeout: 120 # default: 120 sec
+responseTimeout: 30 # default: 120 sec
 maxRetryTimeoutInSec: 60 # default: 300 sec
 

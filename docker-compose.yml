@@ -17,4 +17,8 @@ services:
       - ./ts_examples/empty_model/config.properties:/home/model-server/config.properties
       - ./ts_examples/empty_model/ts_log_config.xml:/home/model-server/ts_log_config.xml
       - ./ts_examples/empty_model/exported:/home/model-server/model-store
-
+    # command: [
+    #   "torchserve", "--start", 
+    #   "--models", "empty_model=empty_model.mar",
+    #   "--ts-config", "/home/model-server/config.properties"
+    # ]
