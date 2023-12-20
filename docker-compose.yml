@@ -38,11 +38,32 @@ services:
   #     "--ts-config", "/home/model-server/config.properties"
   #   ]
 
-  torchserve_protobuf:
+  # torchserve_protobuf:
+  #   build:
+  #     context: ./ts_examples/protobuf_model
+  #     dockerfile: Dockerfile
+  #   image: moono/ts_examples:protobuf
+  #   shm_size: 1gb
+  #   environment:
+  #     - MY_TS_MODEL_LOG_LEVEL=DEBUG
+  #   ports:
+  #     - 8080:8080
+  #     - 8081:8081
+  #     - 8082:8082
+  #   volumes:
+  #     - ./ts_examples/protobuf_model/config.properties:/home/model-server/config.properties
+  #     - ./ts_examples/protobuf_model/exported:/home/model-server/model-store
+  #   # command: [
+  #   #   "torchserve", "--start", 
+  #   #   "--models", "empty_model=empty_model.mar",
+  #   #   "--ts-config", "/home/model-server/config.properties"
+  #   # ]
+  
+  torchserve_grpc:
     build:
-      context: ./ts_examples/protobuf_model
+      context: ./ts_examples/grpc_model
       dockerfile: Dockerfile
-    image: moono/ts_examples:protobuf
+    image: moono/ts_examples:grpc
     shm_size: 1gb
     environment:
       - MY_TS_MODEL_LOG_LEVEL=DEBUG
@@ -50,9 +71,11 @@ services:
       - 8080:8080
       - 8081:8081
       - 8082:8082
+      - 7070:7070
+      - 7071:7071
     volumes:
-      - ./ts_examples/protobuf_model/config.properties:/home/model-server/config.properties
-      - ./ts_examples/protobuf_model/exported:/home/model-server/model-store
+      - ./ts_examples/grpc_model/config.properties:/home/model-server/config.properties
+      - ./ts_examples/grpc_model/exported:/home/model-server/model-store
     # command: [
     #   "torchserve", "--start", 
     #   "--models", "empty_model=empty_model.mar",
