@@ -6,7 +6,8 @@
 ~$ pip install grpcio protobuf grpcio-tools googleapis-common-protos
 ```
 
-## Take a look at official Torchserve proto files
+## Note
+* Take a look at official Torchserve proto files
 * ref: https://pytorch.org/serve/grpc_api.html
 * `inference.proto`
     * ❗input can only be `map<string, bytes>`
@@ -36,16 +37,6 @@ message PredictionsRequest {
 ```
 
 ## Test code Preparation
-* generate gRPC client stub from official Torchserve proto file
-```bash
-~$ python -m grpc_tools.protoc \
--I ./test_scripts \
---proto_path=./test_scripts \
---python_out=./test_scripts \
---grpc_python_out=./test_scripts \
-./test_scripts/inference.proto \
-./test_scripts/status.proto 
-```
 * generate protobuf for input / output serialization
 ```bash
 ~$ python -m grpc_tools.protoc \
